@@ -5,19 +5,18 @@ using namespace std;
 
 //domeniul alimentatie
 
-class Fruct {
+class MagazinFructe {
 	const int idFruct;
 	string denumire;
 	float greutate;
 	int nrProduse;
 	float* pret;
-public:
-
 	static float TVA;
 	static int contor;
+public:
 
-	//Constr fara parametrii
-	Fruct() :idFruct(contor++)
+	//Constructor fara parametrii
+	MagazinFructe() :idFruct(contor++)
 	{
 		this->denumire = "Mar";
 		this->greutate = 2.5;
@@ -25,8 +24,8 @@ public:
 		this->pret = NULL;
 	}
 
-	//Constr cu 2 parametrii
-	Fruct(string denumire, float greutate) :idFruct(contor++)
+	//Constructor cu 2 parametrii
+	MagazinFructe(string denumire, float greutate) :idFruct(contor++)
 	{
 		this->denumire = denumire;
 		this->greutate = greutate;
@@ -34,20 +33,20 @@ public:
 		this->pret = NULL;
 	}
 
-	//Constr cu toti paramterii
-	Fruct(string denumire, float greutate, int nrProduse, float* pret) :idFruct(contor++)
+	//Constructor cu toti paramterii
+	MagazinFructe(string denumire, float greutate, int nrProduse, float* pret) :idFruct(contor++)
 	{
 		this->denumire = denumire;
 		this->greutate = greutate;
 		this->nrProduse = nrProduse;
 		this->pret = new float[this->nrProduse];
-		for (int i = 0;i < this->nrProduse;i++)
+		for (int i = 0; i < this->nrProduse; i++)
 		{
 			this->pret[i] = pret[i];
 		}
 	}
 
-	~Fruct()
+	~MagazinFructe()
 	{
 		if (this->pret != NULL)
 		{
@@ -57,20 +56,20 @@ public:
 
 	void afisare()
 	{
-		cout << "Denumirea fructului este: " << this->denumire << ", nr de kg " << this->greutate << " , are nr de produse " << this->nrProduse << " si pretul pentru fiecare produs este: ";
-		for (int i = 0;i < this->nrProduse;i++)
+		cout << "Denumirea magazinului de fructe este: " << this->denumire << ", nr de kg " << this->greutate << " , are nr de produse " << this->nrProduse << " si pretul pentru fiecare produs este: ";
+		for (int i = 0; i < this->nrProduse; i++)
 		{
 			cout << this->pret[i] << " ";
 		}
-		cout << "Fructul are TVA-ul: " << this->TVA;
+		cout << "Magazinul de fructe are TVA-ul: " << this->TVA;
 		cout << endl;
 	}
 
-	static void setTVA(float TVA) 
+	static void setTVA(float TVA)
 	{
-		Fruct::TVA = TVA;
+		MagazinFructe::TVA = TVA;
 	}
-	
+
 	const int getIdFruct()
 	{
 		return this->idFruct;
@@ -92,16 +91,14 @@ public:
 		return this->pret;
 	}
 
-	void setDenumire(string denumireNou) 
+	void setDenumire(string denumireNou)
 	{
 		this->denumire = denumireNou;
 	}
-
 	void setGreutate(float greutateNoua)
 	{
 		this->greutate = greutateNoua;
 	}
-
 	void setProduse(int nrProduseNou, float* pretNou)
 	{
 		this->nrProduse = nrProduseNou;
@@ -110,27 +107,26 @@ public:
 			delete[]this->pret;
 		}
 		this->pret = new float[this->nrProduse];
-		for (int i = 0;i < this->nrProduse;i++)
+		for (int i = 0; i < this->nrProduse; i++)
 		{
 			this->pret[i] = pretNou[i];
 		}
 	}
 
-   //Constr de copiere
-
-	Fruct(const Fruct& f) :idFruct(contor++)
+	//Constructorul de copiere
+	MagazinFructe(const MagazinFructe& f) :idFruct(contor++)
 	{
 		this->denumire = f.denumire;
 		this->greutate = f.greutate;
 		this->nrProduse = f.nrProduse;
 		this->pret = new float[this->nrProduse];
-		for (int i = 0;i < this->nrProduse;i++)
+		for (int i = 0; i < this->nrProduse; i++)
 		{
-			this->pret[i] =f.pret[i];
+			this->pret[i] = f.pret[i];
 		}
 	}
 
-   //metoda medie
+	//metoda medie
 	float mediePreturi()
 	{
 		float rezultat = 0;
@@ -152,24 +148,116 @@ public:
 
 	//metoda statica pt a oferi acces la atributul static
 	static float getTVA() {
-		return Fruct::TVA;
+		return MagazinFructe::TVA;
 	}
+
+	//Operatorul=
+	MagazinFructe& operator=(const MagazinFructe& f)
+	{
+		if (this->pret != NULL)
+		{
+			delete[]this->pret;
+		}
+		this->denumire = f.denumire;
+		this->greutate = f.greutate;
+		this->nrProduse = f.nrProduse;
+		this->pret = new float[this->nrProduse];
+		for (int i = 0; i < this->nrProduse; i++)
+		{
+			this->pret[i] = f.pret[i];
+		}
+		return *this;
+	}
+
+	//Operatorul<<
+	friend ostream& operator<<(ostream& out, MagazinFructe& f)
+	{
+		cout << "Id: " << f.idFruct << endl;
+		cout << "Denumire: " << f.denumire << endl;
+		cout << "Greutate: " << f.greutate << endl;
+		cout << "Nr produse: " << f.nrProduse << endl;
+		cout << "Pret: " << endl;
+		for (int i = 0; i < f.nrProduse; i++)
+		{
+			cout << f.pret[i] << endl;
+		}
+		return out;
+	}
+
+	//Operatorul>>
+	friend istream& operator>>(istream& in, MagazinFructe& f)
+	{
+		delete[]f.pret;
+		in >> f.denumire;
+		cout << endl;
+		in >> f.greutate;
+		cout << endl;
+		in >> f.nrProduse;
+		cout << endl;
+		f.pret = new float[f.nrProduse];
+		for (int i = 0; i < f.nrProduse; i++)
+		{
+			in >> f.pret[i];
+		}
+		return in;
+	}
+
+	//Operatorul index []
+	float operator[](int poz)
+	{
+		if (poz >= 0 && poz < this->nrProduse)
+		{
+			return this->pret[poz];
+		}
+		else
+		{
+			return 0;
+		}
+	}
+
+	//Operatorul de comparatie intre nr produse
+	bool operator>=(MagazinFructe& f)
+	{
+		if (this->nrProduse >= f.nrProduse)
+		{
+			return 1;
+		}
+		else
+		{
+			return 0;
+		}
+	}
+
+	//Operatorul de autoasignare +=, prin care adaugam un nou element in vectorul de produse
+	MagazinFructe& operator+=(float pretNou)
+	{
+		MagazinFructe copie = *this;
+		delete[]this->pret;
+		this->nrProduse++;
+		this->pret = new float[this->nrProduse];
+		for (int i = 0; i < copie.nrProduse; i++)
+		{
+			this->pret[i] = copie.pret[i];
+		}
+		this->pret[copie.nrProduse] = pretNou;
+		return *this;
+	}
+
 
 };
 
-	
 class Bautura {
 	const int id;
 	string marca;
 	char* categorie;
 	bool esteCuAcid;
 	int cantitate;
-
-public:
 	static int contor;
 	static float TVA;
 
-	//Constr fara parametrii
+public:
+	
+	//Constructorul fara parametrii
 	Bautura() :id(contor++)
 	{
 		this->marca = "Borsec";
@@ -180,7 +268,7 @@ public:
 
 	}
 
-	//Constr cu 2 parametrii
+	//Constructorul cu 2 parametrii
 	Bautura(string marca, const char* categorie) :id(contor++)
 	{
 		this->marca = marca;
@@ -191,7 +279,7 @@ public:
 
 	}
 
-	//Constr cu toti parametrii
+	//Constructorul cu toti parametrii
 	Bautura(string marca, const char* categorie, bool esteCuAcid, int cantitate) :id(contor++)
 	{
 		this->marca = marca;
@@ -265,7 +353,6 @@ public:
 	}
 
 	//Constructorul de copiere
-
 	Bautura(const Bautura& b) :id(contor++)
 	{
 		this->marca = b.marca;
@@ -288,21 +375,104 @@ public:
 		return Bautura::TVA;
 	}
 
+	//Operatorul<<
+	friend ostream& operator<<(ostream& out, Bautura& b)
+	{
+		out << "Id: " << b.id << endl;
+		out << "Marca: " << b.marca << endl;
+		out << "Categorie: " << b.categorie << endl;
+		out << "Este cu acid? " << b.esteCuAcid << endl;
+		out << "Cantitate: " << b.cantitate << endl;
+		return out;
+	}
+
+	//Operatorul>>
+	friend istream& operator>>(istream& in, Bautura& b)
+	{
+		delete[]b.categorie;
+		in >> b.marca;
+		cout << endl;
+		char aux[50];
+		in >> aux;
+		b.categorie = new char[strlen(aux) + 1];
+		strcpy(b.categorie, aux);
+		cout << endl;
+		in >> b.esteCuAcid;
+		cout << endl;
+		in >> b.cantitate;
+		return in;
+	}
+
+	//Operatorul=
+	Bautura& operator=(const Bautura& b)
+	{
+		if (this->categorie != NULL)
+		{
+			delete[]this->categorie;
+		}
+		this->marca = b.marca;
+		this->categorie = new char[strlen(b.categorie) + 1];
+		strcpy(this->categorie, b.categorie);
+		this->esteCuAcid = b.esteCuAcid;
+		this->cantitate = b.cantitate;
+		return *this;
+	}
+
+	//Operatorul de negatie !
+	friend void operator!(Bautura& b)
+	{
+		if (b.esteCuAcid == 1)
+		{
+			b.esteCuAcid = 0;
+		}
+		else
+		{
+			b.esteCuAcid = 1;
+		}
+	}
+
+	//Operatorul de cast la float
+	operator float()
+	{
+		float cantitateModif;
+		cantitateModif = this->cantitate / 2 + 0.5;
+		return cantitateModif;
+	}
+
+	//Operator de testare a egalitatii == pt cantitate
+	bool operator==(Bautura& b)
+	{
+		if (this->cantitate == b.cantitate)
+		{
+			return 1;
+		}
+		else
+		{
+			return 0;
+		}
+	}
+
+	//Operatorul functie prin care sa cresc cantitatea cu o valoare
+	void operator()(int valoare)
+	{
+		this->cantitate = this->cantitate + valoare;
+	}
+
 };
 
-class Prajitura {
+class MagazinPrajituri {
 	const int id;
 	string denumire;
 	int calorii;
 	int nrProduse;
 	float* pret;
-
-public:
 	static int contor;
 	static float TVA;
 
-	//Constr fara parametrii
-	Prajitura() :id(contor++)
+public:
+	
+	//Constructorul fara parametrii
+	MagazinPrajituri() :id(contor++)
 	{
 		this->denumire = "Ecler";
 		this->calorii = 261;
@@ -310,8 +480,8 @@ public:
 		this->pret = NULL;
 	}
 
-	//Constr cu doi parametri
-	Prajitura(string denumire, int calorii) :id(contor++)
+	//Constructorul cu doi parametri
+	MagazinPrajituri(string denumire, int calorii) :id(contor++)
 	{
 		this->denumire = denumire;
 		this->calorii = calorii;
@@ -319,24 +489,24 @@ public:
 		this->pret = NULL;
 	}
 
-	//Constr cu toti parametrii
-	Prajitura(string denumire, int calorii, int nrProduse, float* pret) :id(contor++)
+	//Constructorul cu toti parametrii
+	MagazinPrajituri(string denumire, int calorii, int nrProduse, float* pret) :id(contor++)
 	{
 		this->denumire = denumire;
 		this->calorii = calorii;
 		this->nrProduse = nrProduse;
 		this->pret = new float[this->nrProduse];
-		for (int i = 0;i < this->nrProduse;i++)
+		for (int i = 0; i < this->nrProduse; i++)
 		{
 			this->pret[i] = pret[i];
 		}
 
 	}
 
-	~Prajitura()
+	~MagazinPrajituri()
 	{
-	   if (this->pret != NULL)
-		{	
+		if (this->pret != NULL)
+		{
 			delete[]this->pret;
 
 		}
@@ -345,7 +515,7 @@ public:
 	void afisare()
 	{
 		cout << "Denumirea prajiturii este: " << this->denumire << " ,contine numarul de calorii: " << this->calorii << " ,are nr produse " << this->nrProduse << " si are pretul de:  ";
-		for (int i = 0;i < this->nrProduse;i++)
+		for (int i = 0; i < this->nrProduse; i++)
 		{
 			cout << this->pret[i] << " ";
 
@@ -357,10 +527,10 @@ public:
 
 	static void setTVA(float TVA)
 	{
-		Prajitura::TVA = TVA;
+		MagazinPrajituri::TVA = TVA;
 	}
 
-	const int getId() 
+	const int getId()
 	{
 		return this->id;
 	}
@@ -380,14 +550,14 @@ public:
 	{
 		return this->pret;
 	}
-	
+
 	void setDenumire(string denumireNoua)
 	{
 		this->denumire = denumireNoua;
 	}
-	void setCalorii(int caloriiNoi)  
+	void setCalorii(int caloriiNoi)
 	{
-		 this->calorii = caloriiNoi;
+		this->calorii = caloriiNoi;
 	}
 	void setProduse(int nrProduseNou, float* pretNou)
 	{
@@ -398,50 +568,133 @@ public:
 
 		}
 		this->pret = new float[this->nrProduse];
-		for (int i = 0;i < this->nrProduse;i++)
+		for (int i = 0; i < this->nrProduse; i++)
 		{
 			this->pret[i] = pretNou[i];
 		}
 	}
 
-	//Const de copiere
-	Prajitura(const Prajitura& p) :id(contor++)
+	//Constructorul de copiere
+	MagazinPrajituri(const MagazinPrajituri& p) :id(contor++)
 	{
 		this->denumire = p.denumire;
 		this->calorii = p.calorii;
 		this->nrProduse = p.nrProduse;
 		this->pret = new float[this->nrProduse];
-		for (int i = 0;i < this->nrProduse;i++)
+		for (int i = 0; i < this->nrProduse; i++)
 		{
 			this->pret[i] = p.pret[i];
 		}
 	}
 
 	static float getTVA() {
-		return Prajitura::TVA;
+		return MagazinPrajituri::TVA;
 	}
+
+	//Operatorul<<
+	friend ostream& operator<<(ostream& out, MagazinPrajituri& p)
+	{
+		cout << "Id: " << p.id << endl;
+		cout << "Denumire: " << p.denumire << endl;
+		cout << "Nr calorii: " << p.calorii << endl;
+		cout << "Nr produse: " << p.nrProduse << endl;
+		cout << "Pret: " << endl;
+		for (int i = 0;i < p.nrProduse;i++)
+		{
+			cout << p.pret[i] << endl;
+		}
+		return out;
+	}
+
+	//Operatorul>>
+	friend istream& operator>>(istream& in, MagazinPrajituri& p)
+	{
+		delete[]p.pret;
+		in >> p.denumire;
+		cout << endl;
+		in >> p.calorii;
+		cout << endl;
+		in >> p.nrProduse;
+		cout << endl;
+		p.pret = new float[p.nrProduse];
+		for (int i = 0;i < p.nrProduse;i++)
+		{
+			in >> p.pret[i];
+		}
+		return in;
+	}
+
+	//Operatorul=
+	MagazinPrajituri& operator=(const MagazinPrajituri& p)
+	{
+		if (this->pret != NULL)
+		{
+			delete[]this->pret;
+		}
+		this->denumire = p.denumire;
+		this->calorii = p.calorii;
+		this->nrProduse = p.nrProduse;
+		this->pret = new float[this->nrProduse];
+		for (int i = 0; i < this->nrProduse; i++)
+		{
+			this->pret[i] = p.pret[i];
+		}
+		return *this;
+	}
+
+	//Operatorul index []
+	float operator[](int poz)
+	{
+		if (poz >= 0 && poz < this->nrProduse)
+		{
+			return this->pret[poz];
+		}
+		else
+		{
+			return 0;
+		}
+	}
+	
+	//Operatorul functie ()
+	void operator()(int valoare)
+	{
+		this->calorii = this->calorii + valoare;
+	}
+
+	//Operatorul ++ autoincrementare
+	//preincrementare
+	MagazinPrajituri& operator++()
+	{
+		this->calorii++;
+		return *this;
+	}
+	//postincrementare
+	MagazinPrajituri& operator++(int)
+	{
+		MagazinPrajituri copie = *this;
+		this->calorii++;
+		return copie;
+	}
+	
 };
 
-
-int Fruct::contor = 1;
-float Fruct::TVA = 0.9;
+int MagazinFructe::contor = 1;
+float MagazinFructe::TVA = 0.9;
 int Bautura::contor = 1;
 float Bautura::TVA = 0.9;
-int Prajitura::contor = 1;
-float Prajitura::TVA = 0.9;
+int MagazinPrajituri::contor = 1;
+float MagazinPrajituri::TVA = 0.9;
 
-
-
-void main() 
+void main()
 {
-	Fruct f;
-	Fruct f1("Para", 1.2);
+	MagazinFructe f;
+	MagazinFructe f1("Para", 1.2);
 	float vector1[] = { 20.5,19,10 };
-	Fruct f2("Portocala", 1.5, 3, vector1);
+	MagazinFructe f2("Portocala", 1.5, 3, vector1);
 	float vector3[] = { 4.9,6,10,5.6 };
-	Fruct f3("Banana", 5.2, 4, vector3);
+	MagazinFructe f3("Banana", 5.2, 4, vector3);
 	float vector4[] = { 6.7,4,9 };
-	Fruct f4("Piersica", 7, 3, vector4);
+	MagazinFructe f4("Piersica", 7, 3, vector4);
 
 	f.afisare();
 	cout << endl << endl;
@@ -463,12 +716,12 @@ void main()
 	b2.afisare();
 	cout << endl << endl;
 
-	Prajitura p;
-	Prajitura p1("Tiramisu", 210);
+	MagazinPrajituri p;
+	MagazinPrajituri p1("Tiramisu", 210);
 	float vector2[] = { 14.5,20.3,25,11 };
-	Prajitura p2("Televizor", 310, 4, vector2);
+	MagazinPrajituri p2("Televizor", 310, 4, vector2);
 	float vector10[] = { 23,14,6.7,9,12,10.5 };
-	Prajitura p3("Amandina", 200, 6, vector10);
+	MagazinPrajituri p3("Amandina", 200, 6, vector10);
 
 	p.afisare();
 	cout << endl << endl;
@@ -477,7 +730,7 @@ void main()
 	p2.afisare();
 	cout << endl << endl;
 
-	Fruct::setTVA(0.1);
+	MagazinFructe::setTVA(0.1);
 	f.afisare();
 	cout << endl << endl;
 	f1.afisare();
@@ -493,7 +746,7 @@ void main()
 	b2.afisare();
 	cout << endl << endl;
 
-	Prajitura::setTVA(0.2);
+	MagazinPrajituri::setTVA(0.2);
 	p.afisare();
 	cout << endl << endl;
 	p1.afisare();
@@ -501,12 +754,13 @@ void main()
 	p2.afisare();
 	cout << endl << endl;
 
+	cout << "----Getteri----" << endl << endl;
 	cout << "Id fruct: " << f.getIdFruct() << endl;
 	cout << "Denumire: " << f.getDenumire() << endl;
 	cout << "Greutate: " << f.getGreutate() << endl;
 	cout << "Numar produse: " << f.getNrProduse() << endl;
 	cout << "Pret pentru fiecare produs: " << endl;
-	for (int i = 0;i < f.getNrProduse();i++)
+	for (int i = 0; i < f.getNrProduse(); i++)
 	{
 		cout << f.getPret()[i] << ";" << endl;
 	}
@@ -517,7 +771,7 @@ void main()
 	cout << "Greutate: " << f1.getGreutate() << endl;
 	cout << "Numar produse: " << f1.getNrProduse() << endl;
 	cout << "Pret pentru fiecare produs: " << endl;
-	for (int i = 0;i < f1.getNrProduse();i++)
+	for (int i = 0; i < f1.getNrProduse(); i++)
 	{
 		cout << f1.getPret()[i] << ";" << endl;
 	}
@@ -528,7 +782,7 @@ void main()
 	cout << "Greutate: " << f2.getGreutate() << endl;
 	cout << "Numar produse: " << f2.getNrProduse() << endl;
 	cout << "Pret pentru fiecare produs: " << endl;
-	for (int i = 0;i < f2.getNrProduse();i++)
+	for (int i = 0; i < f2.getNrProduse(); i++)
 	{
 		cout << f2.getPret()[i] << ";" << endl;
 	}
@@ -539,7 +793,7 @@ void main()
 	cout << "Greutate: " << f3.getGreutate() << endl;
 	cout << "Numar produse: " << f3.getNrProduse() << endl;
 	cout << "Pret pentru fiecare produs: " << endl;
-	for (int i = 0;i < f3.getNrProduse();i++)
+	for (int i = 0; i < f3.getNrProduse(); i++)
 	{
 		cout << f3.getPret()[i] << ";" << endl;
 	}
@@ -550,12 +804,13 @@ void main()
 	cout << "Greutate: " << f4.getGreutate() << endl;
 	cout << "Numar produse: " << f4.getNrProduse() << endl;
 	cout << "Pret pentru fiecare produs: " << endl;
-	for (int i = 0;i < f4.getNrProduse();i++)
+	for (int i = 0; i < f4.getNrProduse(); i++)
 	{
 		cout << f4.getPret()[i] << ";" << endl;
 	}
 	cout << endl << endl;
 
+	cout << "----Setteri----" << endl << endl;
 	f3.setDenumire("Rodie");
 	f3.setGreutate(6.2);
 	float vector6[] = { 5,8.3 };
@@ -566,19 +821,20 @@ void main()
 	cout << "Greutate: " << f3.getGreutate() << endl;
 	cout << "Numar produse: " << f3.getNrProduse() << endl;
 	cout << "Pret pentru fiecare produs: " << endl;
-	for (int i = 0;i < f3.getNrProduse();i++)
+	for (int i = 0; i < f3.getNrProduse(); i++)
 	{
 		cout << f3.getPret()[i] << ";" << endl;
 	}
 	cout << endl << endl;
 
-	Fruct f5 = f4;
+	cout << "----Constructorul de copiere----" << endl << endl;
+	MagazinFructe f5 = f4;
 	cout << "Id fruct: " << f4.getIdFruct() << endl;
 	cout << "Denumire: " << f4.getDenumire() << endl;
 	cout << "Greutate: " << f4.getGreutate() << endl;
 	cout << "Numar produse: " << f4.getNrProduse() << endl;
 	cout << "Pret pentru fiecare produs: " << endl;
-	for (int i = 0;i < f4.getNrProduse();i++)
+	for (int i = 0; i < f4.getNrProduse(); i++)
 	{
 		cout << f4.getPret()[i] << ";" << endl;
 	}
@@ -588,13 +844,13 @@ void main()
 	cout << "Greutate: " << f5.getGreutate() << endl;
 	cout << "Numar produse: " << f5.getNrProduse() << endl;
 	cout << "Pret pentru fiecare produs: " << endl;
-	for (int i = 0;i < f5.getNrProduse();i++)
+	for (int i = 0; i < f5.getNrProduse(); i++)
 	{
 		cout << f5.getPret()[i] << ";" << endl;
 	}
 	cout << endl << endl;
 
-
+	cout <<"----Getteri----"<< endl << endl;
 	cout << "Id bautura: " << b.getId() << endl;
 	cout << "Marca: " << b.getMarca() << endl;
 	cout << "Categorie: " << b.getCategorie() << endl;
@@ -630,6 +886,7 @@ void main()
 	cout << "Cantitatea este: " << b4.getCantitate() << endl;
 	cout << endl;
 
+	cout << "----Setteri----" << endl << endl;
 	b3.setMarca("Mirinda");
 	b3.setCategorie("Portocale");
 	b3.setEsteCuAcid(1);
@@ -642,6 +899,7 @@ void main()
 	cout << "Cantitatea este: " << b3.getCantitate() << endl;
 	cout << endl;
 
+	cout << "----Constructorul de copiere----" << endl << endl;
 	Bautura b5 = b4;
 	cout << endl << endl;
 	cout << "Id bautura: " << b5.getId() << endl;
@@ -650,13 +908,14 @@ void main()
 	cout << "Este cu acid? " << b5.getEsteCuAcid() << endl;
 	cout << "Cantitatea este: " << b5.getCantitate() << endl;
 	cout << endl;
-	
+
+	cout << "----Getteri----" << endl << endl;
 	cout << "Id prajitura: " << p.getId() << endl;
 	cout << "Denumire: " << p.getDenumire() << endl;
 	cout << "Numarul de calori: " << p.getCalorii() << endl;
 	cout << "Nr de produse: " << p.getNrProduse() << endl;
-	cout << "Pret pentru fiecare produs: "  << endl;
-	for (int i = 0;i < p.getNrProduse();i++)
+	cout << "Pret pentru fiecare produs: " << endl;
+	for (int i = 0; i < p.getNrProduse(); i++)
 	{
 		cout << p.getPret()[i] << ";" << endl;
 	}
@@ -667,7 +926,7 @@ void main()
 	cout << "Numarul de calori: " << p1.getCalorii() << endl;
 	cout << "Nr de produse: " << p1.getNrProduse() << endl;
 	cout << "Pret pentru fiecare produs: " << endl;
-	for (int i = 0;i < p1.getNrProduse();i++)
+	for (int i = 0; i < p1.getNrProduse(); i++)
 	{
 		cout << p1.getPret()[i] << ";" << endl;
 	}
@@ -678,7 +937,7 @@ void main()
 	cout << "Numarul de calori: " << p2.getCalorii() << endl;
 	cout << "Nr de produse: " << p2.getNrProduse() << endl;
 	cout << "Pret pentru fiecare produs: " << endl;
-	for (int i = 0;i < p2.getNrProduse();i++)
+	for (int i = 0; i < p2.getNrProduse(); i++)
 	{
 		cout << p2.getPret()[i] << ";" << endl;
 	}
@@ -689,12 +948,13 @@ void main()
 	cout << "Numarul de calori: " << p3.getCalorii() << endl;
 	cout << "Nr de produse: " << p3.getNrProduse() << endl;
 	cout << "Pret pentru fiecare produs: " << endl;
-	for (int i = 0;i < p3.getNrProduse();i++)
+	for (int i = 0; i < p3.getNrProduse(); i++)
 	{
 		cout << p3.getPret()[i] << ";" << endl;
 	}
 	cout << endl << endl;
 
+	cout << "----Setteri----" << endl << endl;
 	p3.setDenumire("Macarons");
 	p3.setCalorii(210);
 	float vector11[] = { 10,13.5 };
@@ -705,19 +965,20 @@ void main()
 	cout << "Numarul de calori: " << p3.getCalorii() << endl;
 	cout << "Nr de produse: " << p3.getNrProduse() << endl;
 	cout << "Pret pentru fiecare produs: " << endl;
-	for (int i = 0;i < p3.getNrProduse();i++)
+	for (int i = 0; i < p3.getNrProduse(); i++)
 	{
 		cout << p3.getPret()[i] << ";" << endl;
 	}
 	cout << endl << endl;
 
-	Prajitura p4 = p2;
+	cout << "----Constructorul de copiere----" << endl << endl;
+	MagazinPrajituri p4 = p2;
 	cout << "Id prajitura: " << p4.getId() << endl;
 	cout << "Denumire: " << p4.getDenumire() << endl;
 	cout << "Numarul de calori: " << p4.getCalorii() << endl;
 	cout << "Nr de produse: " << p4.getNrProduse() << endl;
 	cout << "Pret pentru fiecare produs: " << endl;
-	for (int i = 0;i < p4.getNrProduse();i++)
+	for (int i = 0; i < p4.getNrProduse(); i++)
 	{
 		cout << p4.getPret()[i] << ";" << endl;
 	}
@@ -734,4 +995,137 @@ void main()
 	cout << b1.getTVA() << endl << endl;
 	cout << p1.getTVA() << endl << endl;
 
+
+	cout << "------------------Operator=-----------------" << endl << endl;
+	cout << endl << endl;
+	cout << "Id fruct: " << f4.getIdFruct() << endl;
+	cout << "Denumire: " << f4.getDenumire() << endl;
+	cout << "Greutate: " << f4.getGreutate() << endl;
+	cout << "Numar produse: " << f4.getNrProduse() << endl;
+	cout << "Pret pentru fiecare produs: " << endl;
+	for (int i = 0; i < f4.getNrProduse(); i++)
+	{
+		cout << f4.getPret()[i] << ";" << endl;
+	}
+	cout << endl << endl;
+	f4 = f3;
+	cout << "Id fruct: " << f3.getIdFruct() << endl;
+	cout << "Denumire: " << f3.getDenumire() << endl;
+	cout << "Greutate: " << f3.getGreutate() << endl;
+	cout << "Numar produse: " << f3.getNrProduse() << endl;
+	cout << "Pret pentru fiecare produs: " << endl;
+	for (int i = 0; i < f3.getNrProduse(); i++)
+	{
+		cout << f3.getPret()[i] << ";" << endl;
+	}
+	cout << endl << endl;
+
+	cout << "------------------Operator<<-----------------" << endl << endl;
+	cout << f3 << endl << endl;
+	cout << f4 << endl << endl;
+	cout << f5 << endl << endl;
+	/*cout << "------------------Operator>>-----------------" << endl << endl;
+	cout << f3 << endl << endl;
+	cin >> f3;
+	cout << f3 << endl << endl;*/
+
+	cout << "--------------Operatorul []------------------" << endl << endl;
+	cout << f4[0] << endl << endl;
+	cout << f5[1] << endl << endl;
+	cout << f5[-2] << endl << endl;
+
+	cout << "--------------Operatorul de comparatie------------------" << endl << endl;
+	cout << f3.getNrProduse() << endl;
+	cout << f4.getNrProduse() << endl;
+	cout << (f3 >= f4) << endl << endl;
+
+	cout << "--------------Operatorul de autoasignare += ------------------" << endl << endl;
+	cout << f5 << endl << endl;
+	f5 += 45.6;
+	cout << f5 << endl << endl;
+
+	cout << "--------------Operatorul<<----------------" << endl << endl;
+	cout << b3 << endl << endl;
+	cout << b4 << endl << endl;
+	cout << b5 << endl << endl;
+
+	/*cout << "--------------Operatorul>>----------------" << endl << endl;
+	cout << b3 << endl << endl;
+	cin >> b3;
+	cout << b3 << endl << endl;*/
+
+	cout << "--------------Operatorul=----------------" << endl << endl;
+	cout << b3 << endl << endl;
+	b5 = b3;
+	cout << b5 << endl << endl;
+
+	cout << "--------------Operatorul!----------------" << endl << endl;
+	cout << b5 << endl << endl;
+	!b5;
+	cout << b5 << endl << endl;
+
+	cout << "--------------Operatorul de cast la float----------------" << endl << endl;
+	cout << (float)b5 << endl;
+
+	cout << "--------------Operatorul==----------------" << endl << endl;
+	cout << b3.getCantitate() << endl;
+	cout << b4.getCantitate() << endl;
+	cout << b5.getCantitate() << endl;
+	cout << (b3 == b4) << endl << endl;
+	cout << (b3 == b5) << endl << endl;
+
+	cout << "--------------Operatorul()----------------" << endl << endl;
+	cout << b5 << endl << endl;
+	b5(3);
+	cout << b5 << endl << endl;
+
+	cout << "------------------Operator<<-----------------" << endl << endl;
+	cout << p2 << endl << endl;
+	cout << p3 << endl << endl;
+	/*cout << "------------------Operator>>-----------------" << endl << endl;
+	cout << p2 << endl << endl;
+	cin >> p2;
+	cout << p2 << endl << endl;*/
+
+	cout << "----Operatorul=----" << endl << endl;
+	cout << endl << endl;
+	cout << "Id prajitura: " << p3.getId() << endl;
+	cout << "Denumire: " << p3.getDenumire() << endl;
+	cout << "Numarul de calori: " << p3.getCalorii() << endl;
+	cout << "Nr de produse: " << p3.getNrProduse() << endl;
+	cout << "Pret pentru fiecare produs: " << endl;
+	for (int i = 0; i < p3.getNrProduse(); i++)
+	{
+		cout << p3.getPret()[i] << ";" << endl;
+	}
+	cout << endl << endl;
+	p3 = p2;
+	cout << "Id prajitura: " << p2.getId() << endl;
+	cout << "Denumire: " << p2.getDenumire() << endl;
+	cout << "Numarul de calori: " << p2.getCalorii() << endl;
+	cout << "Nr de produse: " << p2.getNrProduse() << endl;
+	cout << "Pret pentru fiecare produs: " << endl;
+	for (int i = 0; i < p2.getNrProduse(); i++)
+	{
+		cout << p2.getPret()[i] << ";" << endl;
+	}
+	cout << endl << endl;
+
+	cout << "--------------Operatorul []------------------" << endl << endl;
+	cout << p2[0] << endl << endl;
+	cout << p2[-2] << endl << endl;
+	
+	cout << "--------------Operatorul()----------------" << endl << endl;
+	cout << p2 << endl << endl;
+	p2(5);
+	cout << p2 << endl << endl;
+
+	cout << "----Operatorul de autoincrementare----" << endl << endl;
+	cout << p3 << endl << endl;
+	++p3;
+	cout << p3 << endl << endl;
+	
+	cout << p2 << endl << endl;
+	p2++;
+	cout << p2 << endl << endl;
 }
