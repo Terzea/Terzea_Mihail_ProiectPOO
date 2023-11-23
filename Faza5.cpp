@@ -678,6 +678,161 @@ public:
 	
 };
 
+class MagazinBauturi
+{
+	int nrBauturi;
+	Bautura* vectorBauturi;
+
+public:
+
+	//Constructor fara parametrii
+	MagazinBauturi()
+	{
+		this->nrBauturi = 0;
+		this->vectorBauturi = NULL;
+	}
+
+	//Constructor cu toti parametrii
+	MagazinBauturi(int nrBauturi, Bautura* vectorBauturi)
+	{
+		this->nrBauturi = nrBauturi;
+		this->vectorBauturi = new Bautura[this->nrBauturi];
+		for (int i = 0; i < this->nrBauturi; i++)
+		{
+			this->vectorBauturi[i] = vectorBauturi[i];
+		}
+	}
+
+	//Destructor
+	~MagazinBauturi()
+	{
+		if (this->vectorBauturi != NULL)
+		{
+			delete[]this->vectorBauturi;
+		}
+	}
+
+	//Constructorul de copiere
+	MagazinBauturi(const MagazinBauturi& m)
+	{
+		this->nrBauturi = m.nrBauturi;
+		this->vectorBauturi = new Bautura[this->nrBauturi];
+		for (int i = 0; i < this->nrBauturi; i++)
+		{
+			this->vectorBauturi[i] = m.vectorBauturi[i];
+		}
+	}
+
+	//Operatorul=
+	MagazinBauturi& operator=(const MagazinBauturi& m)
+	{
+		if (this->vectorBauturi != NULL)
+		{
+			delete[]this->vectorBauturi;
+		}
+		this->nrBauturi = m.nrBauturi;
+		this->vectorBauturi = new Bautura[this->nrBauturi];
+		for (int i = 0; i < this->nrBauturi; i++)
+		{
+			this->vectorBauturi[i] = m.vectorBauturi[i];
+		}
+		return *this;
+	}
+
+	//Getteri si Setteri
+	int getNrBauturi()
+	{
+		return this->nrBauturi;
+	}
+	Bautura* getVectorBauturi()
+	{
+		return this->vectorBauturi;
+	}
+
+	void setBauturi(int nrBauturi, Bautura* vectorBauturi)
+	{
+		if (this->vectorBauturi != NULL)
+		{
+			delete[]this->vectorBauturi;
+		}
+		this->nrBauturi = nrBauturi;
+		this->vectorBauturi = new Bautura[this->nrBauturi];
+		for (int i = 0; i < this->nrBauturi; i++)
+		{
+			this->vectorBauturi[i] = vectorBauturi[i];
+		}
+	}
+
+	//Operatorul <<
+	friend ostream& operator<<(ostream& out, MagazinBauturi& m)
+	{
+		cout << "Nr bauturi: " << m.nrBauturi << endl;
+		cout << "Vector bauturi: " << endl;
+		for (int i = 0; i < m.nrBauturi; i++)
+		{
+			cout << m.vectorBauturi[i] << endl;
+		}
+		return out;
+	}
+
+	//Operatorul[]
+	Bautura& operator[](int poz)
+	{
+		if (poz >= 0 && poz < this->nrBauturi)
+		{
+			return this->vectorBauturi[poz];
+		}
+	}
+
+	//Operatorul>>
+	friend istream& operator>>(istream& in, MagazinBauturi& m)
+	{
+		delete[]m.vectorBauturi;
+		cout << "Introduceti de la tastatura nr de bauturi: " << endl;
+		in >> m.nrBauturi;
+		cout << "Introduceti de la tastatura vectorul de bauturi: " << endl;
+		m.vectorBauturi = new Bautura[m.nrBauturi];
+		for (int i = 0; i < m.nrBauturi; i++)
+		{
+			in >> m.vectorBauturi[i];
+		}
+		return in;
+	}
+
+	//Op+=
+	MagazinBauturi& operator+=(Bautura bautura)
+	{
+		MagazinBauturi copie = *this;
+		delete[]this->vectorBauturi;
+		this->nrBauturi++;
+		this->vectorBauturi = new Bautura[this->nrBauturi];
+		for (int i = 0; i < copie.nrBauturi; i++)
+		{
+			this->vectorBauturi[i] = copie.vectorBauturi[i];
+		}
+		this->vectorBauturi[copie.nrBauturi] = bautura;
+		return *this;
+	}
+
+	//Op-=
+	MagazinBauturi& operator-=(int poz)
+	{
+		MagazinBauturi copie = *this;
+		delete[]this->vectorBauturi;
+		this->nrBauturi--;
+		this->vectorBauturi = new Bautura[this->nrBauturi];
+		for (int i = 0; i < poz; i++)
+		{
+			this->vectorBauturi[i] = copie.vectorBauturi[i];
+		}
+		for (int i = poz + 1; i < copie.nrBauturi; i++)
+		{
+			this->vectorBauturi[i - 1] = copie.vectorBauturi[i];
+		}
+		return *this;
+	}
+};
+
 int MagazinFructe::contor = 1;
 float MagazinFructe::TVA = 0.9;
 int Bautura::contor = 1;
@@ -1230,5 +1385,68 @@ void main()
 	//!variabila;
 
 	bool var2 = !variabila;
+	cout << endl << endl;
+	cout << "--------------Clasa MagazinBauturi------------------" << endl << endl;
+	Bautura vectorBautura1[] = { b1,b2,b3,b4 };
+	MagazinBauturi m1(4, vectorBautura1);
+
+	cout << "--------------Apelare getteri--------------" << endl << endl;
+	cout << m1.getNrBauturi() << endl << endl;
+	for (int i = 0; i < m1.getNrBauturi(); i++)
+	{
+		cout << m1.getVectorBauturi()[i] << endl;
+	}
+
+	cout << endl << endl;
+	Bautura vectorBautura2[] = { b2,b4 };
+	cout << "----------------Apelare setteri------------------" << endl << endl;
+	m1.setBauturi(2, vectorBautura2);
+	cout << m1.getNrBauturi() << endl << endl;
+	for (int i = 0; i < m1.getNrBauturi(); i++)
+	{
+		cout << m1.getVectorBauturi()[i] << endl;
+	}
+
+	Bautura vectorBautura3[] = { b1,b2,b3 };
+	MagazinBauturi m2(3, vectorBautura3);
+
+	MagazinBauturi m3(4, vectorBautura1);
+
+	cout << "----------------Apelare operatorul<<------------------" << endl << endl;
+	cout << m1 << endl << endl << endl;
+	cout << m2 << endl << endl << endl;
+	cout << m3 << endl << endl << endl;
+
+	cout << "----------------Apelare constr de copiere-----------------" << endl << endl;
+
+	MagazinBauturi m4 = m2;
+	cout << m4 << endl << endl;
+
+	cout << "----------------Apelare operatorul=------------------" << endl << endl;
+
+	m3 = m4;
+	cout << m3 << endl << endl;
+
+	cout << "----------------Apelare operatorul[]------------------" << endl << endl;
+
+	cout << m2[0] << endl << endl;
+
+	/*cout << "----------------Apelare operatorul>>------------------" << endl << endl;
+
+	cout << m3 << endl << endl;
+	cin >> m3;
+	cout << endl << endl;
+	cout << m3 << endl << endl;*/
+
+	cout << "--------------Apelare operatorul +=-----------------" << endl << endl;
+	cout << m3 << endl << endl;
+	m3 += b3;
+	cout << m3 << endl << endl;
+
+	cout << "--------------Apelare operatorul -=-----------------" << endl << endl;
+	cout << m4 << endl << endl;
+	m4 -= 0;
+	cout << m4 << endl << endl;
 	
 }
+	
