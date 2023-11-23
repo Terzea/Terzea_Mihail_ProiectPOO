@@ -1128,4 +1128,107 @@ void main()
 	cout << p2 << endl << endl;
 	p2++;
 	cout << p2 << endl << endl;
+
+	//Vectori de obiecte
+	MagazinFructe* vectorFructe = new MagazinFructe[4];
+	vectorFructe[0] = f1;
+	vectorFructe[1] = f2;
+	vectorFructe[2] = f3;
+	vectorFructe[3] = f4;
+	cout << "--------------Afisare vector fructe--------------------" << endl << endl;
+	for (int i = 0; i < 4; i++)
+	{
+		cout << vectorFructe[i] << endl << endl;
+	}
+
+	Bautura* vectorBautura = new Bautura[3];
+	vectorBautura[0] = b2;
+	vectorBautura[1] = b3;
+	vectorBautura[2] = b4;
+	cout << "--------------Afisare vector bauturi--------------------" << endl << endl;
+	for (int i = 0; i < 3; i++)
+	{
+		cout << vectorBautura[i] << endl << endl;
+	}
+
+	MagazinPrajituri* vectorPrajituri = new MagazinPrajituri[5];
+	vectorPrajituri[0] = p2;
+	vectorPrajituri[1] = p1;
+	vectorPrajituri[2] = p3;
+	vectorPrajituri[3] = p4;
+	vectorPrajituri[4] = p3;
+	cout << "--------------Afisare vector prajituri--------------------" << endl << endl;
+	for (int i = 0; i < 5; i++)
+	{
+		cout << vectorPrajituri[i] << endl << endl;
+	}
+ 
+	//Matricea de obiecte
+	Bautura* bauturi = new Bautura[3];
+	bauturi[0] = b1;
+	bauturi[1] = b2;
+	bauturi[2] = b3;
+	if (bauturi) {
+		delete[]bauturi;
+	}
+
+	Bautura* bauturiInLine = new Bautura[3]{ b1,b2,b3 };
+	delete[]bauturiInLine;
+
+
+	Bautura** bauturi2 = new Bautura * [3];
+	bauturi2[0] = &b1;
+	bauturi2[1] = &b2;
+	bauturi2[2] = &b3;
+
+	delete[]bauturi2;
+
+
+	Bautura* pointerBautura = new Bautura();
+	Bautura* vector = new Bautura[5];
+
+	Bautura** pointeri = new Bautura * [5];
+	for (int i = 0; i < 5; i++) {
+		pointeri[i] = new Bautura();
+	}
+
+	Bautura** matrice = new Bautura * [5];
+	for (int i = 0; i < 5; i++) {
+		matrice[i] = new Bautura[5];
+	}
+
+	cout << *pointerBautura;
+	for (int i = 0; i < 5; i++) {
+		cout << vector[i] << endl << endl;
+	}
+	for (int i = 0; i < 5; i++) {
+		cout << *(pointeri[i]) << endl << endl;
+	}
+
+	for (int i = 0; i < 5; i++) {
+		for (int j = 0; j < 5; j++) {
+			cout << matrice[i][j];
+		}
+	}
+
+
+	//dezalocare
+	delete pointerBautura;
+	delete[]vector;
+
+	for (int i = 0; i < 5; i++) {
+		delete pointeri[i];
+	}
+	delete[] pointeri;
+	for (int i = 0; i < 5; i++) {
+		delete[]matrice[i];
+	}
+	delete[]matrice;
+
+	bool variabila = true;
+
+	//!variabila;
+
+	bool var2 = !variabila;
+	
 }
