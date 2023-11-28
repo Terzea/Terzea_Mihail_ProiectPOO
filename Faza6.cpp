@@ -1,6 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include<iostream>
 #include<string>
+#include<fstream>
 using namespace std;
 
 //domeniul alimentatie
@@ -243,6 +244,64 @@ public:
 		return *this;
 	}
 
+	//fisiere text
+	friend ofstream& operator<<(ofstream& file, MagazinFructe& f)
+	{
+		file << f.denumire << endl;
+		file << f.greutate << endl;
+		file << f.nrProduse << endl;
+		for (int i = 0; i < f.nrProduse; i++)
+		{
+			file << f.pret[i] << endl;
+		}
+		return file;
+	}
+
+	friend ifstream& operator>>(ifstream& file, MagazinFructe& f)
+	{
+		delete[]f.pret;
+		file >> f.denumire;
+		file >> f.greutate;
+		file >> f.nrProduse;
+		f.pret = new float[f.nrProduse];
+		for (int i = 0; i < f.nrProduse; i++)
+		{
+			file >> f.pret[i];
+		}
+		return file;
+	}
+
+	//fisiere binare
+	void scriereBinar(fstream& file)
+	{
+		int nrLitereDenumire = this->denumire.size();
+		file.write((char*)&nrLitereDenumire, sizeof(int));
+		file.write(this->denumire.c_str(), nrLitereDenumire);
+		file.write((char*)&this->greutate, sizeof(float));
+		file.write((char*)&this->nrProduse, sizeof(int));
+		for (int i = 0; i < this->nrProduse; i++)
+		{
+			file.write((char*)&this->pret[i], sizeof(float));
+		}
+	}
+
+	void citireBinar(fstream& file)
+	{
+		delete[]this->pret;
+		int nrLitereDenumire;
+		file.read((char*)&nrLitereDenumire, sizeof(int));
+		string aux;
+		aux.resize(nrLitereDenumire);
+		file.read((char*)aux.c_str(), nrLitereDenumire);
+		this->denumire = aux;
+		file.read((char*)&this->greutate, sizeof(float));
+		file.read((char*)&this->nrProduse, sizeof(int));
+		this->pret = new float[this->nrProduse];
+		for (int i = 0; i < this->nrProduse; i++)
+		{
+			file.read((char*)&this->pret[i], sizeof(float));
+		}
+	}
 
 };
 
@@ -458,12 +517,73 @@ public:
 		this->cantitate = this->cantitate + valoare;
 	}
 
+
+	//fisiere text
+	friend ofstream& operator<<(ofstream& file, Bautura& b)
+	{
+		file << b.marca << endl;
+		file << b.categorie << endl;
+		file << b.esteCuAcid << endl;
+		file << b.cantitate << endl;
+		return file;
+	}
+
+	friend ifstream& operator>>(ifstream& file, Bautura& b)
+	{
+		delete[]b.categorie;
+		file >> b.marca;
+		char aux[50];
+		file >> aux;
+		b.categorie = new char[strlen(aux) + 1];
+		strcpy(b.categorie, aux);
+		file >> b.esteCuAcid;
+		file >> b.cantitate;
+		return file;
+	}
+
+	//fisiere binare
+	void scriereBinar(fstream& file)
+	{
+		int nrLitereMarca = this->marca.size();
+		file.write((char*)&nrLitereMarca, sizeof(int));
+		file.write(this->marca.c_str(), nrLitereMarca);
+		int nrLitereCategorie = strlen(this->categorie);
+		file.write((char*)&nrLitereCategorie, sizeof(int));
+		for (int i = 0; i < nrLitereCategorie; i++)
+		{
+			file.write((char*)&this->categorie[i], sizeof(char));
+		}
+		file.write((char*)&this->esteCuAcid, sizeof(bool));
+		file.write((char*)&this->cantitate, sizeof(int));
+	}
+
+	void citireBinar(fstream& file)
+	{
+		delete[] this->categorie;
+		int nrLitereMarca;
+		file.read((char*)&nrLitereMarca, sizeof(int));
+		string aux;
+		aux.resize(nrLitereMarca);
+		file.read((char*)aux.c_str(), nrLitereMarca);
+		this->marca = aux;
+		int nrLitereCategorie;
+		file.read((char*)&nrLitereCategorie, sizeof(int));
+		this->categorie = new char[nrLitereCategorie + 1];
+		for (int i = 0; i < nrLitereCategorie; i++)
+		{
+			file.read((char*)&this->categorie[i], sizeof(char));
+		}
+		this->categorie[nrLitereCategorie] = '\0';
+		file.read((char*)&this->esteCuAcid, sizeof(bool));
+		file.read((char*)&this->cantitate, sizeof(int));
+	}
+
 };
 
 class MagazinPrajituri {
 	const int id;
 	string denumire;
-	int calorii;
+	int suprafata;
 	int nrProduse;
 	float* pret;
 	static int contor;
@@ -475,25 +595,25 @@ public:
 	MagazinPrajituri() :id(contor++)
 	{
 		this->denumire = "Ecler";
-		this->calorii = 261;
+		this->suprafata = 261;
 		this->nrProduse = 0;
 		this->pret = NULL;
 	}
 
 	//Constructorul cu doi parametri
-	MagazinPrajituri(string denumire, int calorii) :id(contor++)
+	MagazinPrajituri(string denumire, int suprafata) :id(contor++)
 	{
 		this->denumire = denumire;
-		this->calorii = calorii;
+		this->suprafata = suprafata;
 		this->nrProduse = 0;
 		this->pret = NULL;
 	}
 
 	//Constructorul cu toti parametrii
-	MagazinPrajituri(string denumire, int calorii, int nrProduse, float* pret) :id(contor++)
+	MagazinPrajituri(string denumire, int suprafata, int nrProduse, float* pret) :id(contor++)
 	{
 		this->denumire = denumire;
-		this->calorii = calorii;
+		this->suprafata = suprafata;
 		this->nrProduse = nrProduse;
 		this->pret = new float[this->nrProduse];
 		for (int i = 0; i < this->nrProduse; i++)
@@ -514,7 +634,7 @@ public:
 
 	void afisare()
 	{
-		cout << "Denumirea prajiturii este: " << this->denumire << " ,contine numarul de calorii: " << this->calorii << " ,are nr produse " << this->nrProduse << " si are pretul de:  ";
+		cout << "Denumirea prajiturii este: " << this->denumire << " ,suprafata de: " << this->suprafata << " ,are nr produse " << this->nrProduse << " si are pretul de:  ";
 		for (int i = 0; i < this->nrProduse; i++)
 		{
 			cout << this->pret[i] << " ";
@@ -538,9 +658,9 @@ public:
 	{
 		return this->denumire;
 	}
-	int getCalorii()
+	int getSuprafata()
 	{
-		return this->calorii;
+		return this->suprafata;
 	}
 	float getNrProduse()
 	{
@@ -555,9 +675,9 @@ public:
 	{
 		this->denumire = denumireNoua;
 	}
-	void setCalorii(int caloriiNoi)
+	void setSuprafata(int suprafataNoua)
 	{
-		this->calorii = caloriiNoi;
+		this->suprafata = suprafataNoua;
 	}
 	void setProduse(int nrProduseNou, float* pretNou)
 	{
@@ -578,7 +698,7 @@ public:
 	MagazinPrajituri(const MagazinPrajituri& p) :id(contor++)
 	{
 		this->denumire = p.denumire;
-		this->calorii = p.calorii;
+		this->suprafata = p.suprafata;
 		this->nrProduse = p.nrProduse;
 		this->pret = new float[this->nrProduse];
 		for (int i = 0; i < this->nrProduse; i++)
@@ -596,7 +716,7 @@ public:
 	{
 		cout << "Id: " << p.id << endl;
 		cout << "Denumire: " << p.denumire << endl;
-		cout << "Nr calorii: " << p.calorii << endl;
+		cout << "Suprafata: " << p.suprafata << endl;
 		cout << "Nr produse: " << p.nrProduse << endl;
 		cout << "Pret: " << endl;
 		for (int i = 0;i < p.nrProduse;i++)
@@ -612,7 +732,7 @@ public:
 		delete[]p.pret;
 		in >> p.denumire;
 		cout << endl;
-		in >> p.calorii;
+		in >> p.suprafata;
 		cout << endl;
 		in >> p.nrProduse;
 		cout << endl;
@@ -632,7 +752,7 @@ public:
 			delete[]this->pret;
 		}
 		this->denumire = p.denumire;
-		this->calorii = p.calorii;
+		this->suprafata = p.suprafata;
 		this->nrProduse = p.nrProduse;
 		this->pret = new float[this->nrProduse];
 		for (int i = 0; i < this->nrProduse; i++)
@@ -658,23 +778,83 @@ public:
 	//Operatorul functie ()
 	void operator()(int valoare)
 	{
-		this->calorii = this->calorii + valoare;
+		this->suprafata = this->suprafata + valoare;
 	}
 
 	//Operatorul ++ autoincrementare
 	//preincrementare
 	MagazinPrajituri& operator++()
 	{
-		this->calorii++;
+		this->suprafata++;
 		return *this;
 	}
 	//postincrementare
 	MagazinPrajituri& operator++(int)
 	{
 		MagazinPrajituri copie = *this;
-		this->calorii++;
+		this->suprafata++;
 		return copie;
 	}
+
+	//fisiere text
+	friend ofstream& operator<<(ofstream& file, MagazinPrajituri& p)
+	{
+		file << p.denumire << endl;
+		file << p.suprafata << endl;
+		file << p.nrProduse << endl;
+		for (int i = 0; i < p.nrProduse; i++)
+		{
+			file << p.pret[i] << endl;
+		}
+		return file;
+	}
+
+	friend ifstream& operator>>(ifstream& file, MagazinPrajituri& p)
+	{
+		delete[]p.pret;
+		file >> p.denumire;
+		file >> p.suprafata;
+		file >> p.nrProduse;
+		p.pret = new float[p.nrProduse];
+		for (int i = 0; i < p.nrProduse; i++)
+		{
+			file >> p.pret[i];
+		}
+		return file;
+	}
+
+	//fisiere binare
+	void scriereBinar(fstream& file)
+	{
+		int nrLitereDenumire = this->denumire.size();
+		file.write((char*)&nrLitereDenumire, sizeof(int));
+		file.write(this->denumire.c_str(), nrLitereDenumire);
+		file.write((char*)&this->suprafata, sizeof(int));
+		file.write((char*)&this->nrProduse, sizeof(int));
+		for (int i = 0; i < this->nrProduse; i++)
+		{
+			file.write((char*)&this->pret[i], sizeof(float));
+		}
+	}
+
+	void citireBinar(fstream& file)
+	{
+		delete[]this->pret;
+		int nrLitereDenumire;
+		file.read((char*)&nrLitereDenumire, sizeof(int));
+		string aux;
+		aux.resize(nrLitereDenumire);
+		file.read((char*)aux.c_str(), nrLitereDenumire);
+		this->denumire = aux;
+		file.read((char*)&this->suprafata, sizeof(int));
+		file.read((char*)&this->nrProduse, sizeof(int));
+		this->pret = new float[this->nrProduse];
+		for (int i = 0; i < this->nrProduse; i++)
+		{
+			file.read((char*)&this->pret[i], sizeof(float));
+		}
+	}
+
 	
 };
 
@@ -1067,7 +1247,7 @@ void main()
 	cout << "----Getteri----" << endl << endl;
 	cout << "Id prajitura: " << p.getId() << endl;
 	cout << "Denumire: " << p.getDenumire() << endl;
-	cout << "Numarul de calori: " << p.getCalorii() << endl;
+	cout << "Suprafata: " << p.getSuprafata() << endl;
 	cout << "Nr de produse: " << p.getNrProduse() << endl;
 	cout << "Pret pentru fiecare produs: " << endl;
 	for (int i = 0; i < p.getNrProduse(); i++)
@@ -1078,7 +1258,7 @@ void main()
 
 	cout << "Id prajitura: " << p1.getId() << endl;
 	cout << "Denumire: " << p1.getDenumire() << endl;
-	cout << "Numarul de calori: " << p1.getCalorii() << endl;
+	cout << "Suprafata: " << p1.getSuprafata() << endl;
 	cout << "Nr de produse: " << p1.getNrProduse() << endl;
 	cout << "Pret pentru fiecare produs: " << endl;
 	for (int i = 0; i < p1.getNrProduse(); i++)
@@ -1089,7 +1269,7 @@ void main()
 
 	cout << "Id prajitura: " << p2.getId() << endl;
 	cout << "Denumire: " << p2.getDenumire() << endl;
-	cout << "Numarul de calori: " << p2.getCalorii() << endl;
+	cout << "Suprafata: " << p2.getSuprafata() << endl;
 	cout << "Nr de produse: " << p2.getNrProduse() << endl;
 	cout << "Pret pentru fiecare produs: " << endl;
 	for (int i = 0; i < p2.getNrProduse(); i++)
@@ -1100,7 +1280,7 @@ void main()
 
 	cout << "Id prajitura: " << p3.getId() << endl;
 	cout << "Denumire: " << p3.getDenumire() << endl;
-	cout << "Numarul de calori: " << p3.getCalorii() << endl;
+	cout << "Suprafata: " << p3.getSuprafata() << endl;
 	cout << "Nr de produse: " << p3.getNrProduse() << endl;
 	cout << "Pret pentru fiecare produs: " << endl;
 	for (int i = 0; i < p3.getNrProduse(); i++)
@@ -1111,13 +1291,13 @@ void main()
 
 	cout << "----Setteri----" << endl << endl;
 	p3.setDenumire("Macarons");
-	p3.setCalorii(210);
+	p3.setSuprafata(210);
 	float vector11[] = { 10,13.5 };
 	p3.setProduse(2, vector11);
 
 	cout << "Id prajitura: " << p3.getId() << endl;
 	cout << "Denumire: " << p3.getDenumire() << endl;
-	cout << "Numarul de calori: " << p3.getCalorii() << endl;
+	cout << "Suprafata: " << p3.getSuprafata() << endl;
 	cout << "Nr de produse: " << p3.getNrProduse() << endl;
 	cout << "Pret pentru fiecare produs: " << endl;
 	for (int i = 0; i < p3.getNrProduse(); i++)
@@ -1130,7 +1310,7 @@ void main()
 	MagazinPrajituri p4 = p2;
 	cout << "Id prajitura: " << p4.getId() << endl;
 	cout << "Denumire: " << p4.getDenumire() << endl;
-	cout << "Numarul de calori: " << p4.getCalorii() << endl;
+	cout << "Suprafata: " << p4.getSuprafata() << endl;
 	cout << "Nr de produse: " << p4.getNrProduse() << endl;
 	cout << "Pret pentru fiecare produs: " << endl;
 	for (int i = 0; i < p4.getNrProduse(); i++)
@@ -1246,7 +1426,7 @@ void main()
 	cout << endl << endl;
 	cout << "Id prajitura: " << p3.getId() << endl;
 	cout << "Denumire: " << p3.getDenumire() << endl;
-	cout << "Numarul de calori: " << p3.getCalorii() << endl;
+	cout << "Suprafata: " << p3.getSuprafata() << endl;
 	cout << "Nr de produse: " << p3.getNrProduse() << endl;
 	cout << "Pret pentru fiecare produs: " << endl;
 	for (int i = 0; i < p3.getNrProduse(); i++)
@@ -1257,7 +1437,7 @@ void main()
 	p3 = p2;
 	cout << "Id prajitura: " << p2.getId() << endl;
 	cout << "Denumire: " << p2.getDenumire() << endl;
-	cout << "Numarul de calori: " << p2.getCalorii() << endl;
+	cout << "Suprafata: " << p2.getSuprafata() << endl;
 	cout << "Nr de produse: " << p2.getNrProduse() << endl;
 	cout << "Pret pentru fiecare produs: " << endl;
 	for (int i = 0; i < p2.getNrProduse(); i++)
@@ -1447,6 +1627,49 @@ void main()
 	cout << m4 << endl << endl;
 	m4 -= 0;
 	cout << m4 << endl << endl;
+
+	cout << "-------------------FISIERE -----------------------" << endl << endl;
+	ofstream file1("MagazinFructe.txt", ios::out);
+	file1 << f5 << endl;
+	file1.close();
+	ifstream file2("MagazinFructe.txt", ios::in);
+	file2 >> f;
+	file2.close();
+
+	fstream file3("MagazinFructe.bin", ios::binary | ios::out);
+	f1.scriereBinar(file3);
+	file3.close();
+	fstream file4("MagazinFructe.bin", ios::binary | ios::in);
+	f.citireBinar(file4);
+	file4.close();
+
+	ofstream file5("Bautura.txt", ios::out);
+	file5 << b3 << endl;
+	file5.close();
+	ifstream file6("Bautura.txt", ios::in);
+	file6 >> b;
+	file6.close();
+
+	fstream file7("Bautura.bin", ios::binary | ios::out);
+	b1.scriereBinar(file7);
+	file7.close();
+	fstream file8("Bautura.bin", ios::binary | ios::in);
+	b.citireBinar(file8);
+	file8.close();
+
+	ofstream file9("MagazinPrajituri.txt", ios::out);
+	file9 << p3 << endl;
+	file9.close();
+	ifstream file10("MagazinPrajituri.txt", ios::in);
+	file10 >> p;
+	file10.close();
+
+	fstream file11("MagazinPrajituri.bin", ios::binary | ios::out);
+	p1.scriereBinar(file11);
+	file11.close();
+	fstream file12("MagazinPrajituri.bin", ios::binary | ios::in);
+	p.citireBinar(file12);
+	file12.close();
 	
 }
 	
