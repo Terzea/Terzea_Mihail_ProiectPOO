@@ -6,10 +6,19 @@ using namespace std;
 
 //domeniul alimentatie
 
-class MagazinFructe {
-	const int idFruct;
+class MagazinFructeAstract
+{
+public:
+	virtual void printDenumire() = 0;
+	virtual void printProduse() = 0;
+
+};
+
+class MagazinFructe :public MagazinFructeAstract
+{
+	const int id;
 	string denumire;
-	float greutate;
+	float suprafata;
 	int nrProduse;
 	float* pret;
 	static float TVA;
@@ -17,28 +26,28 @@ class MagazinFructe {
 public:
 
 	//Constructor fara parametrii
-	MagazinFructe() :idFruct(contor++)
+	MagazinFructe() :id(contor++)
 	{
-		this->denumire = "Mar";
-		this->greutate = 2.5;
+		this->denumire = "BioFruct";
+		this->suprafata = 250;
 		this->nrProduse = 0;
 		this->pret = NULL;
 	}
 
 	//Constructor cu 2 parametrii
-	MagazinFructe(string denumire, float greutate) :idFruct(contor++)
+	MagazinFructe(string denumire, float suprafata) :id(contor++)
 	{
 		this->denumire = denumire;
-		this->greutate = greutate;
+		this->suprafata = suprafata;
 		this->nrProduse = 0;
 		this->pret = NULL;
 	}
 
 	//Constructor cu toti paramterii
-	MagazinFructe(string denumire, float greutate, int nrProduse, float* pret) :idFruct(contor++)
+	MagazinFructe(string denumire, float suprafata, int nrProduse, float* pret) :id(contor++)
 	{
 		this->denumire = denumire;
-		this->greutate = greutate;
+		this->suprafata = suprafata;
 		this->nrProduse = nrProduse;
 		this->pret = new float[this->nrProduse];
 		for (int i = 0; i < this->nrProduse; i++)
@@ -57,7 +66,7 @@ public:
 
 	void afisare()
 	{
-		cout << "Denumirea magazinului de fructe este: " << this->denumire << ", nr de kg " << this->greutate << " , are nr de produse " << this->nrProduse << " si pretul pentru fiecare produs este: ";
+		cout << "Denumirea magazinului de fructe este: " << this->denumire << ", suprafata " << this->suprafata << " , are nr de produse " << this->nrProduse << " si pretul pentru fiecare produs este: ";
 		for (int i = 0; i < this->nrProduse; i++)
 		{
 			cout << this->pret[i] << " ";
@@ -71,17 +80,17 @@ public:
 		MagazinFructe::TVA = TVA;
 	}
 
-	const int getIdFruct()
+	const int getId()
 	{
-		return this->idFruct;
+		return this->id;
 	}
 	string getDenumire()
 	{
 		return this->denumire;
 	}
-	float getGreutate()
+	float getSuprafata()
 	{
-		return this->greutate;
+		return this->suprafata;
 	}
 	float getNrProduse()
 	{
@@ -96,9 +105,9 @@ public:
 	{
 		this->denumire = denumireNou;
 	}
-	void setGreutate(float greutateNoua)
+	void setSuprafata(float suprafataNoua)
 	{
-		this->greutate = greutateNoua;
+		this->suprafata = suprafataNoua;
 	}
 	void setProduse(int nrProduseNou, float* pretNou)
 	{
@@ -115,10 +124,10 @@ public:
 	}
 
 	//Constructorul de copiere
-	MagazinFructe(const MagazinFructe& f) :idFruct(contor++)
+	MagazinFructe(const MagazinFructe& f) :id(contor++)
 	{
 		this->denumire = f.denumire;
-		this->greutate = f.greutate;
+		this->suprafata = f.suprafata;
 		this->nrProduse = f.nrProduse;
 		this->pret = new float[this->nrProduse];
 		for (int i = 0; i < this->nrProduse; i++)
@@ -160,7 +169,7 @@ public:
 			delete[]this->pret;
 		}
 		this->denumire = f.denumire;
-		this->greutate = f.greutate;
+		this->suprafata = f.suprafata;
 		this->nrProduse = f.nrProduse;
 		this->pret = new float[this->nrProduse];
 		for (int i = 0; i < this->nrProduse; i++)
@@ -173,9 +182,9 @@ public:
 	//Operatorul<<
 	friend ostream& operator<<(ostream& out, MagazinFructe& f)
 	{
-		cout << "Id: " << f.idFruct << endl;
+		cout << "Id: " << f.id << endl;
 		cout << "Denumire: " << f.denumire << endl;
-		cout << "Greutate: " << f.greutate << endl;
+		cout << "Suprafata: " << f.suprafata << endl;
 		cout << "Nr produse: " << f.nrProduse << endl;
 		cout << "Pret: " << endl;
 		for (int i = 0; i < f.nrProduse; i++)
@@ -191,7 +200,7 @@ public:
 		delete[]f.pret;
 		in >> f.denumire;
 		cout << endl;
-		in >> f.greutate;
+		in >> f.suprafata;
 		cout << endl;
 		in >> f.nrProduse;
 		cout << endl;
@@ -248,7 +257,7 @@ public:
 	friend ofstream& operator<<(ofstream& file, MagazinFructe& f)
 	{
 		file << f.denumire << endl;
-		file << f.greutate << endl;
+		file << f.suprafata << endl;
 		file << f.nrProduse << endl;
 		for (int i = 0; i < f.nrProduse; i++)
 		{
@@ -261,7 +270,7 @@ public:
 	{
 		delete[]f.pret;
 		file >> f.denumire;
-		file >> f.greutate;
+		file >> f.suprafata;
 		file >> f.nrProduse;
 		f.pret = new float[f.nrProduse];
 		for (int i = 0; i < f.nrProduse; i++)
@@ -277,7 +286,7 @@ public:
 		int nrLitereDenumire = this->denumire.size();
 		file.write((char*)&nrLitereDenumire, sizeof(int));
 		file.write(this->denumire.c_str(), nrLitereDenumire);
-		file.write((char*)&this->greutate, sizeof(float));
+		file.write((char*)&this->suprafata, sizeof(float));
 		file.write((char*)&this->nrProduse, sizeof(int));
 		for (int i = 0; i < this->nrProduse; i++)
 		{
@@ -294,7 +303,7 @@ public:
 		aux.resize(nrLitereDenumire);
 		file.read((char*)aux.c_str(), nrLitereDenumire);
 		this->denumire = aux;
-		file.read((char*)&this->greutate, sizeof(float));
+		file.read((char*)&this->suprafata, sizeof(float));
 		file.read((char*)&this->nrProduse, sizeof(int));
 		this->pret = new float[this->nrProduse];
 		for (int i = 0; i < this->nrProduse; i++)
@@ -303,9 +312,37 @@ public:
 		}
 	}
 
+	//Redefinire functii virtual pure
+	void printDenumire()
+	{
+		cout << "Denumirea magazinului de fructe este: " << this->denumire << endl;
+		cout << "Am redefinit functia virtual pura si clasa MagazinFructe nu mai este abstracta" << endl;
+	}
+
+	void printProduse()
+	{
+		cout << "Afisam nr de produse si preturile lor: " << endl;
+		cout << "Nr produse: " << this->nrProduse << endl;
+		cout << "Pret fiecare produs: " << endl;
+		for (int i = 0; i < this->nrProduse; i++)
+		{
+			cout << this->pret[i] << endl;
+		}
+		cout << "Am redefinit functia virtual pura si clasa MagazinFructe nu mai este abstracta" << endl;
+	}
 };
 
-class Bautura {
+class BauturaAbstract
+{
+public:
+
+	virtual void printMarca() = 0;
+	virtual void printCantitate() = 0;
+	virtual void printObject() = 0;
+};
+
+class Bautura : public BauturaAbstract
+{
 protected:
 	const int id;
 	string marca;
@@ -316,7 +353,7 @@ protected:
 	static float TVA;
 
 public:
-	
+
 	//Constructorul fara parametrii
 	Bautura() :id(contor++)
 	{
@@ -579,6 +616,25 @@ public:
 		file.read((char*)&this->cantitate, sizeof(int));
 	}
 
+	//redefinire functii virtual pure
+	void printMarca()
+	{
+		cout << "Marca bauturii este: " << this->marca << endl;
+		cout << "Am redefinit functia virtual pura si clasa Bautura nu mai este clasa abstracta" << endl;
+	}
+	void printCantitate()
+	{
+		cout << "Cantitatea bauturii este: " << this->cantitate << endl;
+		cout << "Am redefinit functia virtual pura si clasa Bautura nu mai este clasa abstracta" << endl;
+	}
+	void printObject()
+	{
+		cout << this->marca << endl;
+		cout << this->categorie << endl;
+		cout << this->esteCuAcid << endl;
+		cout << this->cantitate;
+	}
+
 };
 
 class MagazinPrajituri {
@@ -591,7 +647,7 @@ class MagazinPrajituri {
 	static float TVA;
 
 public:
-	
+
 	//Constructorul fara parametrii
 	MagazinPrajituri() :id(contor++)
 	{
@@ -720,7 +776,7 @@ public:
 		cout << "Suprafata: " << p.suprafata << endl;
 		cout << "Nr produse: " << p.nrProduse << endl;
 		cout << "Pret: " << endl;
-		for (int i = 0;i < p.nrProduse;i++)
+		for (int i = 0; i < p.nrProduse; i++)
 		{
 			cout << p.pret[i] << endl;
 		}
@@ -738,7 +794,7 @@ public:
 		in >> p.nrProduse;
 		cout << endl;
 		p.pret = new float[p.nrProduse];
-		for (int i = 0;i < p.nrProduse;i++)
+		for (int i = 0; i < p.nrProduse; i++)
 		{
 			in >> p.pret[i];
 		}
@@ -775,7 +831,7 @@ public:
 			return 0;
 		}
 	}
-	
+
 	//Operatorul functie ()
 	void operator()(int valoare)
 	{
@@ -856,15 +912,24 @@ public:
 		}
 	}
 
-	
+
 };
 
 class MagazinBauturi
 {
 	int nrBauturi;
 	Bautura* vectorBauturi;
+	BauturaAbstract* bauturiAbstract;
 
 public:
+
+	// Constructor care primeste un obiect de tip abstract
+	MagazinBauturi(BauturaAbstract* bauturiAbstract) : bauturiAbstract(bauturiAbstract) {}
+
+	// Metoda care utilizeaza obiectul de tip abstract
+	void metodaCareUtilizeazaObiectulAbstract() {
+		bauturiAbstract->printObject();
+	}
 
 	//Constructor fara parametrii
 	MagazinBauturi()
@@ -1051,7 +1116,7 @@ public:
 		this->nrGrade = ba.nrGrade;
 		return *this;
 	}
-	
+
 	~BauturaAlcoolica()
 	{
 
@@ -1112,13 +1177,13 @@ float MagazinPrajituri::TVA = 0.9;
 void main()
 {
 	MagazinFructe f;
-	MagazinFructe f1("Para", 1.2);
+	MagazinFructe f1("FructeDelicioase", 120);
 	float vector1[] = { 20.5,19,10 };
-	MagazinFructe f2("Portocala", 1.5, 3, vector1);
+	MagazinFructe f2("LumeaPortocalei", 150, 3, vector1);
 	float vector3[] = { 4.9,6,10,5.6 };
-	MagazinFructe f3("Banana", 5.2, 4, vector3);
+	MagazinFructe f3("GradinaGustarilor", 210, 4, vector3);
 	float vector4[] = { 6.7,4,9 };
-	MagazinFructe f4("Piersica", 7, 3, vector4);
+	MagazinFructe f4("Aprozar", 200, 3, vector4);
 
 	f.afisare();
 	cout << endl << endl;
@@ -1179,9 +1244,9 @@ void main()
 	cout << endl << endl;
 
 	cout << "----Getteri----" << endl << endl;
-	cout << "Id fruct: " << f.getIdFruct() << endl;
+	cout << "Id : " << f.getId() << endl;
 	cout << "Denumire: " << f.getDenumire() << endl;
-	cout << "Greutate: " << f.getGreutate() << endl;
+	cout << "Suprafata: " << f.getSuprafata() << endl;
 	cout << "Numar produse: " << f.getNrProduse() << endl;
 	cout << "Pret pentru fiecare produs: " << endl;
 	for (int i = 0; i < f.getNrProduse(); i++)
@@ -1190,9 +1255,9 @@ void main()
 	}
 	cout << endl << endl;
 
-	cout << "Id fruct: " << f1.getIdFruct() << endl;
+	cout << "Id: " << f1.getId() << endl;
 	cout << "Denumire: " << f1.getDenumire() << endl;
-	cout << "Greutate: " << f1.getGreutate() << endl;
+	cout << "Suprafata: " << f1.getSuprafata() << endl;
 	cout << "Numar produse: " << f1.getNrProduse() << endl;
 	cout << "Pret pentru fiecare produs: " << endl;
 	for (int i = 0; i < f1.getNrProduse(); i++)
@@ -1201,9 +1266,9 @@ void main()
 	}
 	cout << endl << endl;
 
-	cout << "Id fruct: " << f2.getIdFruct() << endl;
+	cout << "Id : " << f2.getId() << endl;
 	cout << "Denumire: " << f2.getDenumire() << endl;
-	cout << "Greutate: " << f2.getGreutate() << endl;
+	cout << "Suprafata: " << f2.getSuprafata() << endl;
 	cout << "Numar produse: " << f2.getNrProduse() << endl;
 	cout << "Pret pentru fiecare produs: " << endl;
 	for (int i = 0; i < f2.getNrProduse(); i++)
@@ -1212,9 +1277,9 @@ void main()
 	}
 	cout << endl << endl;
 
-	cout << "Id fruct: " << f3.getIdFruct() << endl;
+	cout << "Id: " << f3.getId() << endl;
 	cout << "Denumire: " << f3.getDenumire() << endl;
-	cout << "Greutate: " << f3.getGreutate() << endl;
+	cout << "Suprafata: " << f3.getSuprafata() << endl;
 	cout << "Numar produse: " << f3.getNrProduse() << endl;
 	cout << "Pret pentru fiecare produs: " << endl;
 	for (int i = 0; i < f3.getNrProduse(); i++)
@@ -1223,9 +1288,9 @@ void main()
 	}
 	cout << endl << endl;
 
-	cout << "Id fruct: " << f4.getIdFruct() << endl;
+	cout << "Id: " << f4.getId() << endl;
 	cout << "Denumire: " << f4.getDenumire() << endl;
-	cout << "Greutate: " << f4.getGreutate() << endl;
+	cout << "Suprafata: " << f4.getSuprafata() << endl;
 	cout << "Numar produse: " << f4.getNrProduse() << endl;
 	cout << "Pret pentru fiecare produs: " << endl;
 	for (int i = 0; i < f4.getNrProduse(); i++)
@@ -1235,14 +1300,14 @@ void main()
 	cout << endl << endl;
 
 	cout << "----Setteri----" << endl << endl;
-	f3.setDenumire("Rodie");
-	f3.setGreutate(6.2);
+	f3.setDenumire("FructeleVerii");
+	f3.setSuprafata(200);
 	float vector6[] = { 5,8.3 };
 	f3.setProduse(2, vector6);
 
-	cout << "Id fruct: " << f3.getIdFruct() << endl;
+	cout << "Id: " << f3.getId() << endl;
 	cout << "Denumire: " << f3.getDenumire() << endl;
-	cout << "Greutate: " << f3.getGreutate() << endl;
+	cout << "Suprafata: " << f3.getSuprafata() << endl;
 	cout << "Numar produse: " << f3.getNrProduse() << endl;
 	cout << "Pret pentru fiecare produs: " << endl;
 	for (int i = 0; i < f3.getNrProduse(); i++)
@@ -1253,9 +1318,9 @@ void main()
 
 	cout << "----Constructorul de copiere----" << endl << endl;
 	MagazinFructe f5 = f4;
-	cout << "Id fruct: " << f4.getIdFruct() << endl;
+	cout << "Id: " << f4.getId() << endl;
 	cout << "Denumire: " << f4.getDenumire() << endl;
-	cout << "Greutate: " << f4.getGreutate() << endl;
+	cout << "Suprafata: " << f4.getSuprafata() << endl;
 	cout << "Numar produse: " << f4.getNrProduse() << endl;
 	cout << "Pret pentru fiecare produs: " << endl;
 	for (int i = 0; i < f4.getNrProduse(); i++)
@@ -1263,9 +1328,9 @@ void main()
 		cout << f4.getPret()[i] << ";" << endl;
 	}
 	cout << endl << endl;
-	cout << "Id fruct: " << f5.getIdFruct() << endl;
+	cout << "Id: " << f5.getId() << endl;
 	cout << "Denumire: " << f5.getDenumire() << endl;
-	cout << "Greutate: " << f5.getGreutate() << endl;
+	cout << "Suprafata: " << f5.getSuprafata() << endl;
 	cout << "Numar produse: " << f5.getNrProduse() << endl;
 	cout << "Pret pentru fiecare produs: " << endl;
 	for (int i = 0; i < f5.getNrProduse(); i++)
@@ -1274,7 +1339,7 @@ void main()
 	}
 	cout << endl << endl;
 
-	cout <<"----Getteri----"<< endl << endl;
+	cout << "----Getteri----" << endl << endl;
 	cout << "Id bautura: " << b.getId() << endl;
 	cout << "Marca: " << b.getMarca() << endl;
 	cout << "Categorie: " << b.getCategorie() << endl;
@@ -1334,7 +1399,7 @@ void main()
 	cout << endl;
 
 	cout << "----Getteri----" << endl << endl;
-	cout << "Id prajitura: " << p.getId() << endl;
+	cout << "Id: " << p.getId() << endl;
 	cout << "Denumire: " << p.getDenumire() << endl;
 	cout << "Suprafata: " << p.getSuprafata() << endl;
 	cout << "Nr de produse: " << p.getNrProduse() << endl;
@@ -1345,7 +1410,7 @@ void main()
 	}
 	cout << endl << endl;
 
-	cout << "Id prajitura: " << p1.getId() << endl;
+	cout << "Id: " << p1.getId() << endl;
 	cout << "Denumire: " << p1.getDenumire() << endl;
 	cout << "Suprafata: " << p1.getSuprafata() << endl;
 	cout << "Nr de produse: " << p1.getNrProduse() << endl;
@@ -1356,7 +1421,7 @@ void main()
 	}
 	cout << endl << endl;
 
-	cout << "Id prajitura: " << p2.getId() << endl;
+	cout << "Id: " << p2.getId() << endl;
 	cout << "Denumire: " << p2.getDenumire() << endl;
 	cout << "Suprafata: " << p2.getSuprafata() << endl;
 	cout << "Nr de produse: " << p2.getNrProduse() << endl;
@@ -1367,7 +1432,7 @@ void main()
 	}
 	cout << endl << endl;
 
-	cout << "Id prajitura: " << p3.getId() << endl;
+	cout << "Id: " << p3.getId() << endl;
 	cout << "Denumire: " << p3.getDenumire() << endl;
 	cout << "Suprafata: " << p3.getSuprafata() << endl;
 	cout << "Nr de produse: " << p3.getNrProduse() << endl;
@@ -1384,7 +1449,7 @@ void main()
 	float vector11[] = { 10,13.5 };
 	p3.setProduse(2, vector11);
 
-	cout << "Id prajitura: " << p3.getId() << endl;
+	cout << "Id: " << p3.getId() << endl;
 	cout << "Denumire: " << p3.getDenumire() << endl;
 	cout << "Suprafata: " << p3.getSuprafata() << endl;
 	cout << "Nr de produse: " << p3.getNrProduse() << endl;
@@ -1397,7 +1462,7 @@ void main()
 
 	cout << "----Constructorul de copiere----" << endl << endl;
 	MagazinPrajituri p4 = p2;
-	cout << "Id prajitura: " << p4.getId() << endl;
+	cout << "Id: " << p4.getId() << endl;
 	cout << "Denumire: " << p4.getDenumire() << endl;
 	cout << "Suprafata: " << p4.getSuprafata() << endl;
 	cout << "Nr de produse: " << p4.getNrProduse() << endl;
@@ -1422,9 +1487,9 @@ void main()
 
 	cout << "------------------Operator=-----------------" << endl << endl;
 	cout << endl << endl;
-	cout << "Id fruct: " << f4.getIdFruct() << endl;
+	cout << "Id: " << f4.getId() << endl;
 	cout << "Denumire: " << f4.getDenumire() << endl;
-	cout << "Greutate: " << f4.getGreutate() << endl;
+	cout << "Suprafata: " << f4.getSuprafata() << endl;
 	cout << "Numar produse: " << f4.getNrProduse() << endl;
 	cout << "Pret pentru fiecare produs: " << endl;
 	for (int i = 0; i < f4.getNrProduse(); i++)
@@ -1433,9 +1498,9 @@ void main()
 	}
 	cout << endl << endl;
 	f4 = f3;
-	cout << "Id fruct: " << f3.getIdFruct() << endl;
+	cout << "Id: " << f3.getId() << endl;
 	cout << "Denumire: " << f3.getDenumire() << endl;
-	cout << "Greutate: " << f3.getGreutate() << endl;
+	cout << "Suprafata: " << f3.getSuprafata() << endl;
 	cout << "Numar produse: " << f3.getNrProduse() << endl;
 	cout << "Pret pentru fiecare produs: " << endl;
 	for (int i = 0; i < f3.getNrProduse(); i++)
@@ -1513,7 +1578,7 @@ void main()
 
 	cout << "----Operatorul=----" << endl << endl;
 	cout << endl << endl;
-	cout << "Id prajitura: " << p3.getId() << endl;
+	cout << "Id: " << p3.getId() << endl;
 	cout << "Denumire: " << p3.getDenumire() << endl;
 	cout << "Suprafata: " << p3.getSuprafata() << endl;
 	cout << "Nr de produse: " << p3.getNrProduse() << endl;
@@ -1524,7 +1589,7 @@ void main()
 	}
 	cout << endl << endl;
 	p3 = p2;
-	cout << "Id prajitura: " << p2.getId() << endl;
+	cout << "Id: " << p2.getId() << endl;
 	cout << "Denumire: " << p2.getDenumire() << endl;
 	cout << "Suprafata: " << p2.getSuprafata() << endl;
 	cout << "Nr de produse: " << p2.getNrProduse() << endl;
@@ -1538,7 +1603,7 @@ void main()
 	cout << "--------------Operatorul []------------------" << endl << endl;
 	cout << p2[0] << endl << endl;
 	cout << p2[-2] << endl << endl;
-	
+
 	cout << "--------------Operatorul()----------------" << endl << endl;
 	cout << p2 << endl << endl;
 	p2(5);
@@ -1548,7 +1613,7 @@ void main()
 	cout << p3 << endl << endl;
 	++p3;
 	cout << p3 << endl << endl;
-	
+
 	cout << p2 << endl << endl;
 	p2++;
 	cout << p2 << endl << endl;
@@ -1586,7 +1651,7 @@ void main()
 	{
 		cout << vectorPrajituri[i] << endl << endl;
 	}
- 
+
 	//Matricea de obiecte
 	Bautura* bauturi = new Bautura[3];
 	bauturi[0] = b1;
@@ -1759,7 +1824,7 @@ void main()
 	fstream file12("MagazinPrajituri.bin", ios::binary | ios::in);
 	p.citireBinar(file12);
 	file12.close();
-	
+
 
 	cout << "--------------Clasa Bautura Alcoolica----------------------" << endl << endl;
 	BauturaAlcoolica ba;
@@ -1878,5 +1943,53 @@ void main()
 	BauturaCarbogazoasa b11 = bc3;
 	cout << bc3 << endl;
 	cout << b11 << endl;
+	cout << endl << endl;
 
+	MagazinFructeAstract* pointerMagazinFructeAbstract;
+	MagazinFructe* pointerMagazinFructe = new MagazinFructe[2];
+	pointerMagazinFructe[0] = f4;
+	pointerMagazinFructe[1] = f5;
+
+	pointerMagazinFructeAbstract = pointerMagazinFructe;
+
+	cout << "Late binding: " << endl << endl;
+	pointerMagazinFructeAbstract->printDenumire();
+	cout << endl << endl;
+	pointerMagazinFructeAbstract->printProduse();
+	pointerMagazinFructe->printDenumire();
+	cout << endl << endl;
+	pointerMagazinFructe->printProduse();
+
+
+	BauturaAbstract* pointerBauturaAbstract;
+	Bautura* pointerBautura1 = new Bautura[10];
+	pointerBautura1[0] = b2;
+	pointerBautura1[1] = b3;
+	pointerBautura1[2] = bc1;
+	pointerBautura1[3] = bc2;
+	pointerBautura1[4] = ba2;
+	pointerBautura1[5] = ba4;
+	pointerBautura1[6] = ba3;
+	pointerBautura1[7] = b5;
+	pointerBautura1[8] = b4;
+	pointerBautura1[9] = bc3;
+	pointerBauturaAbstract = pointerBautura1;
+	pointerBauturaAbstract->printCantitate();
+	cout << endl << endl;
+	pointerBauturaAbstract->printMarca();
+	cout << endl << endl;
+	pointerBauturaAbstract->printObject();
+	cout << endl << endl;
+	pointerBautura1->printCantitate();
+	cout << endl << endl;
+	pointerBautura1->printMarca();
+	cout << endl << endl;
+	pointerBautura1->printObject();
+	cout << endl << endl;
+
+	//clasa has a 
+	Bautura bautura;
+	MagazinBauturi magazin(&bautura);
+
+	magazin.metodaCareUtilizeazaObiectulAbstract();
 }
