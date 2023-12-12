@@ -306,6 +306,7 @@ public:
 };
 
 class Bautura {
+protected:
 	const int id;
 	string marca;
 	char* categorie;
@@ -1013,6 +1014,94 @@ public:
 	}
 };
 
+class BauturaAlcoolica :public Bautura
+{
+	float nrGrade;
+
+public:
+	BauturaAlcoolica() :Bautura()
+	{
+		this->nrGrade = 30;
+	}
+	BauturaAlcoolica(float nrGrade, string marca, const char* categorie, bool esteCuAcid, int cantitate) :Bautura(marca, categorie, esteCuAcid, cantitate)
+	{
+		this->nrGrade = nrGrade;
+	}
+	friend ostream& operator<<(ostream& out, const BauturaAlcoolica& ba)
+	{
+		out << (Bautura&)ba;
+		out << ba.nrGrade;
+		return out;
+	}
+	float getNrGrade()
+	{
+		return this->nrGrade;
+	}
+	void setNrGrade(float nrGrade)
+	{
+		this->nrGrade = nrGrade;
+	}
+	BauturaAlcoolica(const BauturaAlcoolica& ba) :Bautura(ba)
+	{
+		this->nrGrade = ba.nrGrade;
+	}
+	BauturaAlcoolica& operator=(const BauturaAlcoolica& ba)
+	{
+		Bautura::operator=(ba);
+		this->nrGrade = ba.nrGrade;
+		return *this;
+	}
+	
+	~BauturaAlcoolica()
+	{
+
+	}
+};
+
+class BauturaCarbogazoasa :public Bautura
+{
+	string aroma;
+public:
+	BauturaCarbogazoasa() :Bautura()
+	{
+		this->aroma = "Mar";
+	}
+	BauturaCarbogazoasa(string aroma, string marca, const char* categorie, bool esteCuAcid, int cantitate) :Bautura(marca, categorie, esteCuAcid, cantitate)
+	{
+		this->aroma = aroma;
+	}
+	friend ostream& operator<<(ostream& out, const BauturaCarbogazoasa& bc)
+	{
+		out << (Bautura&)bc;
+		out << bc.aroma;
+		return out;
+	}
+	string getAroma()
+	{
+		return this->aroma;
+	}
+	void setAroma(string aromaNoua)
+	{
+		this->aroma = aromaNoua;
+	}
+	BauturaCarbogazoasa(const BauturaCarbogazoasa& bc) :Bautura(bc)
+	{
+		this->aroma = bc.aroma;
+	}
+	BauturaCarbogazoasa& operator=(const BauturaCarbogazoasa& bc)
+	{
+		Bautura::operator=(bc);
+		this->aroma = bc.aroma;
+		return *this;
+	}
+
+	~BauturaCarbogazoasa()
+	{
+
+	}
+};
+
+
 int MagazinFructe::contor = 1;
 float MagazinFructe::TVA = 0.9;
 int Bautura::contor = 1;
@@ -1671,5 +1760,123 @@ void main()
 	p.citireBinar(file12);
 	file12.close();
 	
+
+	cout << "--------------Clasa Bautura Alcoolica----------------------" << endl << endl;
+	BauturaAlcoolica ba;
+	BauturaAlcoolica ba1(45, "Absolut", "Vodka-Tarie", 1, 30);
+	BauturaAlcoolica ba2(17, "Purcari", "Vin", 1, 25);
+	BauturaAlcoolica ba3(7, "Ciucas", "Bere", 0, 40);
+
+	cout << ba.getNrGrade() << endl << endl;
+	cout << ba.getMarca() << endl << endl;
+	cout << ba.getCategorie() << endl << endl;
+	cout << ba.getEsteCuAcid() << endl << endl;
+	cout << ba.getCantitate() << endl << endl;
+	cout << endl << endl;
+	cout << ba1.getNrGrade() << endl << endl;
+	cout << ba1.getMarca() << endl << endl;
+	cout << ba1.getCategorie() << endl << endl;
+	cout << ba1.getEsteCuAcid() << endl << endl;
+	cout << ba1.getCantitate() << endl << endl;
+	cout << endl << endl;
+	cout << ba2.getNrGrade() << endl << endl;
+	cout << ba2.getMarca() << endl << endl;
+	cout << ba2.getCategorie() << endl << endl;
+	cout << ba2.getEsteCuAcid() << endl << endl;
+	cout << ba2.getCantitate() << endl << endl;
+	cout << endl << endl;
+	cout << ba3.getNrGrade() << endl << endl;
+	cout << ba3.getMarca() << endl << endl;
+	cout << ba3.getCategorie() << endl << endl;
+	cout << ba3.getEsteCuAcid() << endl << endl;
+	cout << ba3.getCantitate() << endl << endl;
+	cout << endl << endl;
+
+	ba3.setNrGrade(35);
+	ba3.setCategorie("Spumante");
+	ba3.setMarca("Purcari");
+	ba3.setEsteCuAcid(1);
+	ba3.setCantitate(750);
+	cout << ba3.getNrGrade() << endl << endl;
+	cout << ba3.getMarca() << endl << endl;
+	cout << ba3.getCategorie() << endl << endl;
+	cout << ba3.getEsteCuAcid() << endl << endl;
+	cout << ba3.getCantitate() << endl << endl;
+	cout << endl << endl;
+
+	cout << ba << endl << endl;
+	cout << ba1 << endl << endl;
+	cout << ba2 << endl << endl;
+	cout << ba3 << endl << endl;
+
+	BauturaAlcoolica ba4 = ba2;
+	cout << ba4 << endl << endl;
+
+	ba4 = ba2;
+	cout << ba4 << endl << endl;
+
+	//upcasting
+	Bautura b10 = ba3;
+	cout << ba3 << endl << endl;
+	cout << b10 << endl << endl;
+
+	cout << "--------------Clasa Bautura Carbogazoasa----------------------" << endl << endl;
+	BauturaCarbogazoasa bc;
+	BauturaCarbogazoasa bc1("Zmeura", "Sirop", "Cu Zahar", 1, 10);
+	BauturaCarbogazoasa bc2("Mar", "Profructta", "Fara Zahar", 1, 20);
+	BauturaCarbogazoasa bc3("Struguri", "Aronia", "Fara Zahar", 1, 35);
+
+	cout << bc.getAroma() << endl << endl;
+	cout << bc.getMarca() << endl << endl;
+	cout << bc.getCategorie() << endl << endl;
+	cout << bc.getEsteCuAcid() << endl << endl;
+	cout << bc.getCantitate() << endl << endl;
+	cout << endl << endl;
+	cout << bc1.getAroma() << endl << endl;
+	cout << bc1.getMarca() << endl << endl;
+	cout << bc1.getCategorie() << endl << endl;
+	cout << bc1.getEsteCuAcid() << endl << endl;
+	cout << bc1.getCantitate() << endl << endl;
+	cout << endl << endl;
+	cout << bc2.getAroma() << endl << endl;
+	cout << bc2.getMarca() << endl << endl;
+	cout << bc2.getCategorie() << endl << endl;
+	cout << bc2.getEsteCuAcid() << endl << endl;
+	cout << bc2.getCantitate() << endl << endl;
+	cout << endl << endl;
+	cout << bc3.getAroma() << endl << endl;
+	cout << bc3.getMarca() << endl << endl;
+	cout << bc3.getCategorie() << endl << endl;
+	cout << bc3.getEsteCuAcid() << endl << endl;
+	cout << bc3.getCantitate() << endl << endl;
+	cout << endl << endl;
+
+	bc3.setAroma("Castravete");
+	bc3.setCategorie("Cu Zahar");
+	bc3.setMarca("Sprite");
+	bc3.setEsteCuAcid(1);
+	bc3.setCantitate(100);
+	cout << bc3.getAroma() << endl << endl;
+	cout << bc3.getMarca() << endl << endl;
+	cout << bc3.getCategorie() << endl << endl;
+	cout << bc3.getEsteCuAcid() << endl << endl;
+	cout << bc3.getCantitate() << endl << endl;
+	cout << endl << endl;
+
+	cout << bc3 << endl << endl;
+
+	BauturaCarbogazoasa bc4 = bc2;
+	cout << bc2 << endl;
+	cout << bc4 << endl;
+	cout << endl << endl;
+
+	bc4 = bc2;
+	cout << bc4 << endl << endl;
+	cout << endl << endl;
+
+	//upcasting
+	BauturaCarbogazoasa b11 = bc3;
+	cout << bc3 << endl;
+	cout << b11 << endl;
+
 }
-	
